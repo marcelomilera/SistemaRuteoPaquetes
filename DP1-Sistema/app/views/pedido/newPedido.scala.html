@@ -1,0 +1,118 @@
+@(message: String)
+
+@layouts.headerandfooter("") {
+    
+    <!DOCTYPE html>
+    <html>
+    <head>
+    	<title>REGISTRAR PEDIDO</title>
+    	<meta charset="UTF-8">
+    
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel='stylesheet' href='@routes.Assets.at("css/jquery.bxslider.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/MisEstilos.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/font-awesome.css")'>
+    	
+    </head>
+    <body>
+
+    <!---Cuerpo -->
+    <main class="main">
+    	<div class="content" style="max-width: 100%;">
+    		<!-- Utilizando Bootstrap -->
+    		<br/><br/>
+    		<div class="container">
+    			<div class="col-sm-12 text-left lead">
+    					<strong>REGISTRAR PEDIDO</strong>
+    			</div>		
+    		</div>
+    		<div class="container">
+			
+			<form method="POST" action="add" class="form-horizontal form-border">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				
+				<!-- Mensajes de error de validación del Request -->
+				<div class="col-sm-4"></div>
+				
+
+				<br/>
+				<br/>
+				<div class="form-group">
+			  		<div class="text-center">
+			  			<font color="red"> 
+			  				(*) Dato Obligatorio
+			  			</font>
+			  			
+			  		</div>
+			  	</div>
+			  	</br>
+			  	</br>	
+
+				<!-- INICIO INCIO-->				                       				
+				<div class="form-group required">
+		    		<label for="ciudad_origen" class="col-sm-4 control-label">Ciudad de Origen</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="ciudad_origen" name="ciudad_origen" placeholder="Ciudad de Origen" required onkeypress="return inputLimiter(event,'Letters')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+		    		<label for="ciudad_destino" class="col-sm-4 control-label">Ciudad de Destino</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="ciudad_destino" name="ciudad_destino" placeholder="Ciudad de Destino" required onkeypress="return inputLimiter(event,'Letters')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+		    		<label for="personas_id" class="col-sm-4 control-label">ID REMITENTE</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="personas_id" name="personas_id" placeholder="ID de Remitente" required onkeypress="return inputLimiter(event,'Numbers')">
+		    		</div>
+		  		</div>
+
+		  		<div class="form-group required">
+		    		<label for="personas2_id" class="col-sm-4 control-label">ID DESTINATARIO</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="personas2_id" name="personas2_id" placeholder="ID de Destinatario" required onkeypress="return inputLimiter(event,'Numbers')">
+		    		</div>
+		  		</div>
+		  		
+			  	
+					<!-- FIN FIN FIN  -->				
+			
+				</br>
+			  	</br>
+				<div class="btn-inline">
+					<div class="btn-group col-sm-5"></div>
+					
+					<div class="btn-group ">
+						<input class="btn btn-primary" type="submit" value="Confirmar">
+					</div>
+					<div class="btn-group">						
+						<a href='@routes.PedidosC.index()' class="btn btn-info">Cancelar</a>
+					</div>
+				</div>
+				</br>
+				</br>
+
+				
+				
+			</form>
+		</div>
+        </div>		
+    
+	<!-- JQuery -->
+	<script src='@routes.Assets.at("js/jquery-1.11.3.min.js")'></script>
+	<!-- Bootstrap -->
+	<script src='@routes.Assets.at("js/bootstrap.js")'></script>	
+	<!-- BXSlider -->
+	<script src='@routes.Assets.at("js/jquery.bxslider.min.js")'></script>
+    	<!-- Mis Scripts -->
+    	<script src='@routes.Assets.at("js/MisScripts.js")'></script>
+    
+    
+    </body>
+    </html>
+
+}

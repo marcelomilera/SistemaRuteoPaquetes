@@ -1,0 +1,124 @@
+@(message: String)
+
+@layouts.headerandfooter("") {
+    
+    <!DOCTYPE html>
+    <html>
+    <head>
+    	<title>REGISTRAR USUARIO</title>
+    	<meta charset="UTF-8">
+    
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel='stylesheet' href='@routes.Assets.at("css/jquery.bxslider.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/MisEstilos.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/font-awesome.css")'>
+    	
+    </head>
+    <body>
+
+    <!---Cuerpo -->
+    <main class="main">
+    	<div class="content" style="max-width: 100%;">
+    		<!-- Utilizando Bootstrap -->
+    		<br/><br/>
+    		<div class="container">
+    			<div class="col-sm-12 text-left lead">
+    					<strong>REGISTRAR USUARIO</strong>
+    			</div>		
+    		</div>
+    		<div class="container">
+			
+			<form method="POST" action="add" class="form-horizontal form-border">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				
+				<!-- Mensajes de error de validación del Request -->
+				<div class="col-sm-4"></div>
+				
+
+				<br/>
+				<br/>
+				<div class="form-group">
+			  		<div class="text-center">
+			  			<font color="red"> 
+			  				(*) Dato Obligatorio
+			  			</font>
+			  			
+			  		</div>
+			  	</div>
+			  	</br>
+			  	</br>	
+
+				<!-- INICIO INCIIO -->				                       				
+				<div class="form-group required">
+		    		<label for="cuenta" class="col-sm-4 control-label">Cuenta</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="cuenta" name="cuenta" placeholder="Nombre de Cuenta" required onkeypress="return inputLimiter(event,'NameCharactersAndNumbers')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+		    		<label for="nombre" class="col-sm-4 control-label">Nombre</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre de Usuario" required onkeypress="return inputLimiter(event,'Letters')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+		    		<label for="apellido" class="col-sm-4 control-label">Apellido</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido de Usuario" required onkeypress="return inputLimiter(event,'Letters')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+			    	<label for="dni" class="col-sm-4 control-label">DNI</label>
+			    	<div class="col-sm-5">
+			      		<input type="text" class="form-control" id="dni" name="dni" placeholder="DNI de Usuario" required onkeypress="return inputLimiter(event,'Numbers')">
+			    	</div>			      					      		
+			  	</div>	
+			  
+		  		<div class="form-group required">
+			    	<label for="correo" class="col-sm-4 control-label">Correo</label>
+			    	<div class="col-sm-5">
+			      		<input type="text" class="form-control" id="correo" name="correo" placeholder="Correo de Usuario" required onkeypress="return inputLimiter(event,'NameCharactersAndNumbers')">
+			    	</div>
+			  	</div>
+			  	
+					<!-- FIN FIN FIN  -->				
+			
+				</br>
+			  	</br>
+				<div class="btn-inline">
+					<div class="btn-group col-sm-5"></div>
+					
+					<div class="btn-group ">
+						<input class="btn btn-primary" type="submit" value="Confirmar">
+					</div>
+					<div class="btn-group">						
+						<a href='@routes.UsuariosC.index()' class="btn btn-info">Cancelar</a>
+					</div>
+				</div>
+				</br>
+				</br>
+
+				
+				
+			</form>
+		</div>
+        </div>		
+    
+    <!-- JQuery -->
+    	<script src="js/jquery-1.11.3.min.js"></script>
+    	<!-- Bootstrap -->
+    	<script type="text/javascript" src="js/bootstrap.js"></script>
+    	<!-- BXSlider -->
+    	<script src="js/jquery.bxslider.min.js"></script>
+    	<!-- Mis Scripts -->
+    	<script src="js/MisScripts.js"></script>
+    
+    
+    </body>
+    </html>
+
+}

@@ -1,0 +1,127 @@
+@(message: String)
+
+@layouts.headerandfooter("") {
+    
+    <!DOCTYPE html>
+    <html>
+    <head>
+    	<title>REGISTRAR PLAN DE VUELO</title>
+    	<meta charset="UTF-8">
+    
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel='stylesheet' href='@routes.Assets.at("css/jquery.bxslider.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/MisEstilos.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/font-awesome.css")'>
+    	<link rel="stylesheet" type="text/css" href='@routes.Assets.at("css/timepicki.css")'>
+    </head>
+    <body>
+
+    <!---Cuerpo -->
+    <main class="main">
+    	<div class="content" style="max-width: 100%;">
+    		<!-- Utilizando Bootstrap -->
+    		<br/><br/>
+    		<div class="container">
+    			<div class="col-sm-12 text-left lead">
+    					<strong>REGISTRAR PLAN DE VUELO</strong>
+    			</div>		
+    		</div>
+    		<div class="container">
+			
+			<form method="POST" action="add" class="form-horizontal form-border">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				
+				<!-- Mensajes de error de validación del Request -->
+				<div class="col-sm-4"></div>
+				
+
+				<br/>
+				<br/>
+				<div class="form-group">
+			  		<div class="text-center">
+			  			<font color="red"> 
+			  				(*) Dato Obligatorio
+			  			</font>
+			  			
+			  		</div>
+			  	</div>
+			  	</br>
+			  	</br>	
+
+				<!-- INICIO INCIIO -->				                       				
+				<div class="form-group required">
+		    		<label for="ciudad_origen" class="col-sm-4 control-label">Ciudad de Origen</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="ciudad_origen" name="ciudad_origen" placeholder="Ciudad de Origen" required onkeypress="return inputLimiter(event,'Letters')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+		    		<label for="ciudad_destino" class="col-sm-4 control-label">Ciudad de Destino</label>
+		    		<div class="col-sm-5">
+		      			<input type="text" class="form-control" id="ciudad_destino" name="ciudad_destino" placeholder="Ciudad de Destino" required onkeypress="return inputLimiter(event,'Letters')">
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+		    		<label for="hora_salida" class="col-sm-4 control-label">Hora de Salida</label>
+		    		<div class="col-sm-5">
+		      			<!--<input type="time" class="form-control" id="hora_salida" name="hora_salida" placeholder="Hora de Salida" required onkeypress="return inputLimiter(event,'Nulo')">-->
+		      			<input type="text" id="hora_salida" name="hora_salida" class="time_element" required/>
+		    		</div>
+		  		</div>
+		  		
+		  		<div class="form-group required">
+			    	<label for="hora_llegada" class="col-sm-4 control-label">Hora de Llegada</label>
+			    	<div class="col-sm-5">
+			      		<!--<input type="time" class="form-control" id="hora_llegada" name="hora_llegada" placeholder="Hora de Llegada" required onkeypress="return inputLimiter(event,'Nulo')">-->
+			      		<input type="text" id="hora_llegada" name="hora_llegada" class="time_element" required/>
+			    	</div>			      					      		
+			  	</div>				  			  	
+				<!-- FIN FIN FIN  -->				
+			
+				</br>
+			  	</br>
+				<div class="btn-inline">
+					<div class="btn-group col-sm-5"></div>
+					
+					<div class="btn-group ">
+						<input class="btn btn-primary" type="submit" value="Confirmar">
+					</div>
+					<div class="btn-group">						
+						<a href='@routes.VuelosC.index()' class="btn btn-info">Cancelar</a>
+					</div>
+				</div>
+				</br>
+				</br>
+
+				
+				
+			</form>
+		</div>
+        </div>		
+    
+    <!-- JQuery -->
+    	<script src='@routes.Assets.at("js/jquery-1.11.3.min.js")'></script>
+		<!-- Bootstrap -->
+		<script src='@routes.Assets.at("js/bootstrap.js")'></script>	
+		<!-- BXSlider -->
+		<script src='@routes.Assets.at("js/jquery.bxslider.min.js")'></script>		
+		<!-- Mis Scripts -->
+		<script src='@routes.Assets.at("js/MisScripts.js")'></script>
+
+		<script src='@routes.Assets.at("js/jquery.dataTables.js")'></script>
+
+		<script src='@routes.Assets.at("js/jquery.js")'></script>
+		<script src='@routes.Assets.at("js/timepicki.js")'></script>
+    	<script>
+		  $(document).ready(function(){
+		    $(".time_element").timepicki();
+		  });
+		</script>
+    
+    </body>
+    </html>
+
+}

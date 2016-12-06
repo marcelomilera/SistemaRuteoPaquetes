@@ -1,0 +1,10 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE dp1.ciudades;
+TRUNCATE TABLE dp1.pedidos;
+TRUNCATE TABLE dp1.pedidos_x_vuelos;
+TRUNCATE TABLE dp1.personas;
+TRUNCATE TABLE dp1.usuarios;
+TRUNCATE TABLE dp1.vuelos;
+
+SET FOREIGN_KEY_CHECKS = 1;

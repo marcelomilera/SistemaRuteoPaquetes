@@ -1,0 +1,122 @@
+@(ciudades:List[models.Ciudades])
+@layouts.headerandfooter("Welcome to Play Framework") {
+    
+    <!DOCTYPE html>
+	<html>
+	<head>
+		<title>Home Page</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel='stylesheet' href='@routes.Assets.at("css/jquery.bxslider.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/MisEstilos.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/font-awesome.css")'>	
+		<link rel='stylesheet' href='@routes.Assets.at("css/DataTable.css")'>			
+	</head>
+	<body>
+	
+	<!---Cuerpo -->
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<p class="lead"><strong>AEROPUERTOS</strong></p>
+			</div>
+		</div>
+	</div>	
+	<!--Pie de págna-->
+	@if(flash.containsKey("success")) {
+        <div class="alert alert-success fade in text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>¡Éxito!</strong> @flash.get("success")
+        </div>
+    }
+
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-danger fade in text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>¡Error!</strong> @flash.get("error")
+        </div>
+    }
+
+    @if(flash.containsKey("info")) {
+        <div class="alert alert-info fade in text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>¡Info!</strong> @flash.get("info")
+        </div>
+    }
+            
+	
+	<div class="table-responsive">
+		<div class="container">
+			<div class="form-group">
+			  		<div class="text-right">
+			  			<font color="black"> 
+			  				Filtra por todos los campos
+			  			</font>
+			  			
+			  		</div>
+			</div>
+			<table class="table table-bordered table-hover text-center display" id="example">
+					<thead class="active" data-sortable="true">
+						<th><div align=center>CÓDIGO</div></th>
+						<th><div align=center>CIUDAD</div></th>
+						<th><div align=center>PAÍS</div></th>							
+						<th><div align=center>NOMBRE CORTO</div></th>
+						<th><div align=center>CAP. ALMACÉN</div></th>
+						<th><div align=center>EDITAR</div></th>
+						<th><div align=center>ELIMINAR</div></th>
+					</thead>
+
+											
+					<tbody>
+					@for(ciudad <- ciudades){
+						<tr>
+							<td>@ciudad.cod_ciudad</td>
+							<td>@ciudad.nombre</td>
+							<td>@ciudad.pais</td>
+							<td>@ciudad.abreviado</td>
+							<td>@ciudad.capacidad_almacen</td>							
+							<td>
+				              <a class="btn btn-info" href='@routes.CiudadesC.edit(ciudad.cod_ciudad)' title="Editar" ><i class="glyphicon glyphicon-pencil"></i></a>
+				            </td>
+				            <td>
+				              <a class="btn btn-info"  title="Eliminar" href='@routes.CiudadesC.delete(ciudad.cod_ciudad)'><i class="glyphicon glyphicon-remove"></i></a>    
+				            </td>
+			            </tr>
+					}
+					</tbody>						
+					
+			</table>			
+		</div>		
+	</div>
+	<br/>
+	<div class="container">		
+		<div class="form-group">
+			<div class="col-sm-16 text-right">
+				<a class="btn btn-info" href='@routes.CiudadesC.newO()' title="Registrar Aeropuerto" >Registrar Aeropuerto<i class="glyphicon" ></i> </a>	
+			</div>
+		</div>		
+	</div>
+
+	<!-- JQuery -->
+	<script src='@routes.Assets.at("js/jquery-1.11.3.min.js")'></script>
+	<!-- Bootstrap -->
+	<script src='@routes.Assets.at("js/bootstrap.js")'></script>	
+	<!-- BXSlider -->
+	<script src='@routes.Assets.at("js/jquery.bxslider.min.js")'></script>
+	
+	<script src='@routes.Assets.at("js/jquery.dataTables.js")'></script>
+
+	<script>
+		$(document).ready(function() {
+		   $('#example').DataTable( {
+		       "language": {
+		           "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+		       }
+		  	});
+  		});
+	</script>
+	</body>
+	</html>
+
+}

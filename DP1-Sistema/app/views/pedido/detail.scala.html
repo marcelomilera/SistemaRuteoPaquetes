@@ -1,0 +1,212 @@
+@(ciudades:List[models.Ciudades],pedido: models.Pedidos, rutas: List[models.Pedidos_x_vuelos])
+
+@layouts.headerandfooter("") {
+    
+    <!DOCTYPE html>
+    <html>
+    <head>
+    	<title>DETALLE DE PEDIDO</title>
+    	<meta charset="UTF-8">
+    
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel='stylesheet' href='@routes.Assets.at("css/jquery.bxslider.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/MisEstilos.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.css")'>
+		<link rel='stylesheet' href='@routes.Assets.at("css/font-awesome.css")'>
+        <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+        <script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>    	
+    </head>
+    <body>
+
+    <!---Cuerpo -->
+    <main class="main">
+    	<div class="content" style="max-width: 100%;">
+    		<!-- Utilizando Bootstrap -->
+    		<br/><br/>
+    		<div class="container">
+    			<div class="col-sm-12 text-left lead">
+    					<strong>DETALLE DE PEDIDO</strong>
+    			</div>		
+    		</div>
+    		<div class="container">
+			
+			<form method="POST" action="add" class="form-horizontal form-border">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				
+				<!-- Mensajes de error de validación del Request -->
+				<div class="col-sm-4"></div>
+				
+
+				<br/>
+				<br/>
+				
+			  	</br>
+			  	</br>	
+
+				<!-- INICIO INCIO-->				                       				
+				<div class="form-group">
+		    		<label for="clienteOrigen_input" class="col-sm-4 control-label">Código del pedido:</label>
+		    		<div class="col-sm-1">
+		      			<input type="text" class="form-control" id="ciudad_origen" name="ciudad_origen" readonly value="@pedido.id">
+		    		</div>		    	
+		  		</div>
+
+				<div class="form-group">
+		    		<label for="clienteOrigen_input" class="col-sm-3 control-label">Origen:</label>
+		    		<label for="clienteOrigen_input" class="col-sm-1 control-label">Código</label>
+		    		<div class="col-sm-1">
+		      			<input type="text" class="form-control" id="ciudad_origen" name="ciudad_origen" readonly value="@pedido.ciudadOrigen.cod_ciudad">
+		    		</div>		    	
+		    		<label for="clienteOrigen_input" class="col-sm-1 control-label">Ciudad</label>
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="ciudad_origen" name="ciudad_origen" readonly value="@pedido.ciudadOrigen.nombre">
+		    		</div>
+		    		<label for="clienteOrigen_input" class="col-sm-1 control-label">País</label>	
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="ciudad_origen" name="ciudad_origen" readonly value="@pedido.ciudadOrigen.pais">
+		    		</div>
+		  		</div>
+		  				  		
+		  		<div class="form-group">
+		    		<label for="clienteDestino_input" class="col-sm-3 control-label">Destino:</label>
+		    		<label for="clienteDestino_input" class="col-sm-1 control-label">Código</label>
+		    		<div class="col-sm-1">
+		      			<input type="text" class="form-control" id="ciudad_destino" name="ciudad_destino" readonly value="@pedido.ciudadDestino.cod_ciudad">
+		    		</div>
+		    		<label for="clienteDestino_input" class="col-sm-1 control-label">Ciudad</label>
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="ciudad_destino" name="ciudad_destino" readonly value="@pedido.ciudadDestino.nombre">
+		    		</div>
+		    		<label for="clienteDestino_input" class="col-sm-1 control-label">País</label>	
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="ciudad_destino" name="ciudad_destino" readonly value="@pedido.ciudadDestino.pais">
+		    		</div>
+		  		</div>		  				  	
+
+		  		</br>
+		  		</br>
+
+		  		<div class="form-group">
+		    		<label for="personas_id" class="col-sm-3 control-label">Remitente:</label>
+		    		<label for="personas_id" class="col-sm-1 control-label">ID</label>
+		    		<div class="col-sm-1">
+		      			<input type="text" class="form-control" id="personas_id" name="personas_id" readonly value="@pedido.persona.id">
+		    		</div>		    	
+		    		<label for="personas_dni" class="col-sm-1 control-label">DNI</label>	
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="personas_dni" name="personas_dni" readonly value="@pedido.persona.dni">
+		    		</div>
+		    		<label for="personas_nombre" class="col-sm-1 control-label">Nombre</label>	
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="personas_nombre" name="personas_nombre" readonly value="@pedido.persona.nombre">
+		    		</div>
+		  		</div>
+
+		  		<div class="form-group">
+		    		<label for="personas2_id" class="col-sm-3 control-label">Destinatario:</label>
+		    		<label for="personas2_id" class="col-sm-1 control-label">ID</label>
+		    		<div class="col-sm-1">
+		      			<input type="text" class="form-control" id="personas2_id" name="personas2_id" readonly value="@pedido.persona2.id">
+		    		</div>		    	
+		    		<label for="personas2_dni" class="col-sm-1 control-label">DNI</label>	
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="personas2_dni" name="personas2_dni" readonly value="@pedido.persona2.dni">
+		    		</div>
+		    		<label for="personas2_nombre" class="col-sm-1 control-label">Nombre</label>	
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="personas2_nombre" name="personas2_nombre" readonly value="@pedido.persona2.nombre">
+		    		</div>
+		  		</div>
+
+		  		</br>
+		  		</br>
+
+		  		<div class="form-group">
+		    		<label for="fecha" class="col-sm-4 control-label">Fecha de Registro:</label>
+		    		<div class="col-sm-4">
+		      			<input type="text" class="form-control" id="fecha" name="fecha" readonly value="@pedido.fecha_registro.format("dd/MM/YYYY")">
+		    		</div>
+		    		<label for="fecha_input" class="col-sm-1 control-label">Hora</label>
+		    		<div class="col-sm-2">
+		      			<input type="text" class="form-control" id="fecha" name="fecha" readonly value="@pedido.fecha_registro.format("HH:mm")">
+		    		</div>
+		  		</div>		  					  		
+			  				  	
+			  	@for(ruta <- rutas){			  		
+			  		<div class="form-group" id="rutasForm">			  		
+			  			<label for="ciudad1" class="col-sm-4 control-label">Ruta:</label>				  		
+			  			<div class="col-sm-4">
+				  			<input type="text" class="form-control" id="ciudad1" name="ciudad1" readonly 
+			      			value="@ruta.vuelo.ciudad_origen ( @ruta.vuelo.hora_salida.format("HH:mm") ) - @ruta.vuelo.ciudad_destino ( @ruta.vuelo.hora_llegada.format("HH:mm") )">
+			      		</div>
+			      		<label for="estado" class="col-sm-1 control-label">Estado:</label>				  		
+			  			<div class="col-sm-2">
+				  			<input type="text" class="form-control" id="estado" name="estado" readonly 
+			      			value="@ruta.estado">
+			      		</div>
+			      	</div>
+			  	}		  				  
+		  		
+					<!-- FIN FIN FIN  -->				
+			
+				</br>
+
+				<div class="btn-inline">
+					<div class="btn-group col-sm-5"></div>									
+					<div class="btn-group">						
+						<a href='@routes.PedidosC.index()' class="btn btn-info">Regresar</a>
+					</div>
+				</div>
+				</br>
+				</br>
+        <div id="chartdiv" style="background-color:#d5eff7; height: 500px;"></div>
+
+        <div style="display:none" >
+            <table id="rutas_tabla">
+                <tbody>
+                @for(ruta <- rutas){
+                    <tr>
+                        <td>@ruta.vuelo.ciudad_origen</td>
+                        <td>@ruta.vuelo.hora_salida.format("HH:mm")</td>
+                        <td>@ruta.vuelo.ciudad_destino</td>
+                        <td>@ruta.vuelo.hora_llegada.format("HH:mm")</td>
+                    </tr>
+                }
+                </tbody>                         
+
+            </table>
+            <table id="ciudades_tabla">
+                <tbody>
+                @for(ciudad <- ciudades){
+                    <tr>
+                        <td>@ciudad.cod_ciudad</td>
+                        <td>@ciudad.nombre</td>
+                        <td>@ciudad.pais</td>
+                        <td>@ciudad.latitud</td>
+                        <td>@ciudad.longitud</td>
+                        <td>@ciudad.huso</td>
+                    </tr>
+                }
+                </tbody>                         
+
+            </table>            
+        </div>				
+				
+			</form>
+		</div>
+        </div>		
+    
+	<!-- JQuery -->
+	<script src='@routes.Assets.at("js/jquery-1.11.3.min.js")'></script>
+	<!-- Bootstrap -->
+	<script src='@routes.Assets.at("js/bootstrap.js")'></script>	
+	<!-- BXSlider -->
+	<script src='@routes.Assets.at("js/jquery.bxslider.min.js")'></script>
+    	<script src='@routes.Assets.at("js/MisScripts.js")'></script>
+    <script src='@routes.Assets.at("js/precargaCiudades.js")'></script>
+        <script src='@routes.Assets.at("js/simuReal.js")'></script>
+    
+    </body>
+    </html>
+
+}

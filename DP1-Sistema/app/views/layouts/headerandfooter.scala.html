@@ -1,0 +1,183 @@
+@(title: String)(content: Html)
+
+<link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
+
+
+<script>
+        function inputLimiter(e,allow) {
+            var AllowableCharacters = '';
+
+            if (allow == 'Letters'){AllowableCharacters=' ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz';}
+            if (allow == 'Numbers'){AllowableCharacters='1234567890';}
+            if (allow == 'SignedNumbers'){AllowableCharacters='1234567890-';}
+            if (allow == 'NameCharacters'){AllowableCharacters=' ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz-.\'._';}
+            if (allow == 'NameCharactersAndNumbers'){AllowableCharacters='1234567890 ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz-\'_.';}
+            if (allow == 'DoubleFormat'){AllowableCharacters='1234567890,.';}
+            if (allow == 'Nulo'){AllowableCharacters='';} //sirve para colocarle a las fechas deben ser obligatoriamente ingresadas por el picker
+
+            var k = document.all?parseInt(e.keyCode): parseInt(e.which);
+            if (k!=13 && k!=8 && k!=0){
+                if ((e.ctrlKey==false) && (e.altKey==false)) {
+                return (AllowableCharacters.indexOf(String.fromCharCode(k))!=-1);
+                } else {
+                return true;
+                }
+            } else {
+                return true;
+            }
+        }
+</script>
+
+
+
+<!--Cabecera- Se separará espacio para el input de busqueda antes de la cabecera de menu-->
+<header class="header">
+        <div class="content clearfix">
+        <!--Input de buscador de la parte superior derecha-->
+        <nav class="search">
+            <div class="search_box">
+                <form action="#" id="search-box" method="get">
+                    <label class="hidden" for="inputbusqueda">Buscar</label>
+                    <input type="text" placeholder="Ingresa tu búsqueda" id="inputbusqueda" name="conte">
+                    <span class="glyphicon glyphicon-search" href="#"></span>
+                </form>
+            </div>
+        </nav>
+    </div>
+    <nav class="navbar navbar-default">
+    <div class="container" id="menuadminregistros">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1" aria-expanded="false">
+          <span class="sr-only">Menu</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand"><img alt="Brand" class="img-responsive" src='@routes.Assets.at("/images/logoSimu.png")' ></a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar1">
+        <!-- Principal -->
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href='@routes.Application.index()' class="dropdown-toggle btn-lg" role="button">
+              Principal 
+            </a>           
+          </li>
+        </ul>
+        
+        <!-- Mantenimientos -->
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle btn-lg" data-toggle="dropdown" role="button">
+              Mantenimientos <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href='@routes.PersonasC.index()' title="Personas" target="_self">Personas</a></li>              
+              <li><a href='@routes.CiudadesC.index()' title="Aeropuertos" target="_self">Aeropuertos/Almacenes</a></li>
+              <li><a href='@routes.VuelosC.index()' title="Planes de Vuelo" target="_self">Planes de Vuelo</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Usuarios -->
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="btn btn-lg dropdown-toggle" data-toggle="dropdown" role="button" >
+              Usuarios <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href='@routes.UsuariosC.index()' title="Consultar usuarios" target="_self">Consultar</a></li>
+                <li><a href='@routes.UsuariosC.newO()' title="Registrar Usuario" target="_self">Registrar</a></li>
+                </li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Pedidos -->
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="btn btn-lg dropdown-toggle" data-toggle="dropdown" role="button" >
+              Pedidos <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href='@routes.PedidosC.index()' title="Consultar talleres" target="_self">Consultar</a></li>
+                <li><a href='@routes.PedidosC.newO()' title="Registrar talleres" target="_self">Registrar</a></li>
+            </ul>
+          </li>
+        </ul>
+        
+         <!-- Simulacion -->
+         <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="btn btn-lg dropdown-toggle" data-toggle="dropdown" role="button" >
+              Enrutamiento <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href='@routes.Application.simulation()' title="Ejecutar Enrutamiento" target="_self">Ejecutar Enrutamiento</a></li>
+                <li><a href='@routes.Application.simulation()' title="Ejecutar Simulación" target="_self">Ejecutar Simulación</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Reportes -->
+        <!--
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle btn-lg" data-toggle="dropdown" role="button">
+              Reportes <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">    
+                <li><a href="#">Reporte 1</a></li>
+                <li><a href="#">Reporte 2</a></li>
+            </ul>
+          </li>
+        </ul>
+        -->
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle btn-lg" data-toggle="dropdown" role="button">
+              <span class="glyphicon glyphicon-user"><span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <!--<li><a href='@routes.UsuariosC.account()' title="Ir a cuenta" target="_self">Mi Cuenta</a></li>-->
+              <li><a href='@routes.SessionC.changePassword()' title="Cambiar contraseña" target="_self">Cambiar mi contraseña</a></li>
+              <li><a href='@routes.SessionC.logout()' title="LOGOUT" target="_self">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<!---Cuerpo -->
+
+<main class="main">
+@content
+</main>
+<!--Pie de págna-->
+
+<footer class="footer">
+    <div class="content">
+        <div class="footer-1">
+            <div class="logofoot">
+                <img alt="Papus Club" src='@routes.Assets.at("images/logo-min.png")' title="Papus Club" style="z-index: -1;">               
+            </div>
+            <div class="contacto">
+                <ul class="info">
+                        <li><a href="#" title="telefono">(51) 1 523 4910</a></li>
+                        <li><span><img class="PointImg" src='@routes.Assets.at("images/punto.png")' width="3px" height="3px"></img></span></li>
+                        <li><a href="#" title="e-mail"></a></li>
+                </ul>
+                <ul class="terminos-condiciones">
+                        <li><a href="#" title="Terminos y Condiciones">TÉRMINOS Y CONDICIONES</a></li>
+                        <li><span><img class="PointImg" src='@routes.Assets.at("images/punto.png")'  width="3px" height="3px"></img></span></li>
+                        <li><a href="#" title="Privacidad">PRIVACIDAD</a></li>
+                        <li><span><img class="PointImg" src='@routes.Assets.at("images/punto.png")'  width="3px" height="3px"></img></span></li>
+                </ul>
+                    
+            </div>
+        </div>
+    </div>
+</footer>
