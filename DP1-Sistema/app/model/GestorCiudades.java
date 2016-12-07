@@ -47,7 +47,8 @@ public class GestorCiudades {
     private int estadoRutaXTiempo=1;
     private int estadoRutaXCapacidadAlmacen=2;
     private int estadoRutaXCapacidadVuelo=3;
-
+    public int leyendoArchivos=0;
+    public int numArchivoLeido=0;
     public Random rnd;
     private int TiempoEntregaPaquetes=0;
 

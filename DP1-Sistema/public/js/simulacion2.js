@@ -4,7 +4,7 @@ var res = url.split(":");
 var ip=res[1].substring(2);
 console.log("ip: "+ip);
 var websocketEchoServerUri = "ws://"+ip+":9000/socket";
-console.log(websocketEchoServerUri);
+console.log(websocketEchoServerUri+"-Segunda simualcion");
 var serverLog = document.getElementById("maplog");
 var escala=1;
 ///////GRAFICOS PARA LA SIMULACION (INICIALIZACION)
@@ -105,7 +105,7 @@ function writeToScreen(message) {
 }
 
 function action(act){
-  $.get( "/simulation/action?act="+act).done(function (data){    
+  $.get( "/simulationDos/action?act="+act).done(function (data){    
     if (data == "1"){
       if(isSendRequest==0){
           isSendRequest=1;
@@ -182,7 +182,7 @@ function recursiveVuelosPaquetes(contador) {
     return;
   }
   writeToScreen("ESCALA: " + escala);
-  $.get( "/simulation/requestPackage?scale="+escala+"&time="+contador).done(function (data) {
+  $.get( "/simulationDos/requestPackage2?scale="+escala+"&time="+contador).done(function (data) {
     stop=data.stop;
     factible=data.factible;    
     if (stop==0) {

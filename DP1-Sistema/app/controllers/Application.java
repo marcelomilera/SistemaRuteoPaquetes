@@ -39,7 +39,14 @@ public class Application extends Controller {
     public static Result simulation() {            
         return ok(views.html.simulation.render(Ciudades.getAll(),Vuelos.getAll()));
     }
-	
+
+
+	@play.db.jpa.Transactional(readOnly=true)
+    public static Result simulation2() {            
+        return ok(views.html.simulation2.render(Ciudades.getAll(),Vuelos.getAll()));
+    }
+
+
 	// Websocket interface
 	public static LegacyWebSocket<String> socket(){
 		return WebSocket.whenReady((in, out) -> {
@@ -48,8 +55,10 @@ public class Application extends Controller {
 	}
 	
 	public static class Capacidades{
+		public String keyCiudad;
 		public ArrayList<Integer> capsCiudad;
 		public ArrayList<Integer> capsVuelo;
+
 	}
 	
 	public static class Paquete{
@@ -71,6 +80,145 @@ public class Application extends Controller {
 		SimpleChat.notifyAll(act);
 		return ok(act);
 	}	
+
+	public static Result requestPackage2(Long scale, Long time){
+		//Se debe correr todos los paquetes que calcen en ese periodo de tiempo y escala
+		Logger.info("Escala: "+scale+" Time: "+time);
+		
+		GestorCiudades gc=GestorCiudades.getInstance();
+
+
+		BufferArchivos baPedidos = BufferArchivos.getInstance();
+		Gson gsonlectura = new Gson();		
+
+		Logger.info("NumArchivo: "+gc.numArchivoLeido+"   ");
+
+		if(gc.leyendoArchivos==0){
+			try (Reader reader = new FileReader( Play.application().getFile("/conf/pedidosArutear0.json"))) {
+				baPedidos=gsonlectura.fromJson(reader, BufferArchivos.class);
+				gc.leyendoArchivos=1;
+				gc.numArchivoLeido=0;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+		}else{
+
+
+			try (Reader reader = new FileReader( Play.application().getFile("/conf/pedidosArutear"+gc.numArchivoLeido+".json"))) {
+			baPedidos=gsonlectura.fromJson(reader, BufferArchivos.class);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+
+			
+		}
+		
+		//TreeMap<Integer,String[]> listaPedidosEscala= baPedidos.getListaPedidosEscala2();
+
+
+
+
+		TreeMap<Integer,String[]> listaPedidosEscala=null;
+		
+		listaPedidosEscala = baPedidos.getListaPedidosEscala2();		
+
+		if(gc.numArchivoLeido==16 && toIntExact(time)==listaPedidosEscala.size()-1){		
+			gc.leyendoArchivos=0;
+		}
+
+
+		if(toIntExact(time)==listaPedidosEscala.size()-1)
+			gc.numArchivoLeido++;
+
+		//Logger.info("Cantidad horas en escala: "+listaPedidosEscala.size());
+			
+
+
+		String [] pedidos = null;		
+		pedidos = listaPedidosEscala.get(toIntExact(time));
+		
+		Paquete pk = new Paquete();
+		if(toIntExact(time)==listaPedidosEscala.size()){
+			pk.stop=1;//para que el front sepa que ya se debe terminar de iterar
+		}else{
+			pk.stop=0;//para que en el front sepa que se seguira iterando
+		}
+		pk.factible=0;
+
+		
+		
+		
+		Logger.info("Cantidad paquetes: "+pedidos.length+"-"+time);
+		Gson gson = new Gson();
+		
+		Boolean todosFactibles=true;
+		for(int i=0;i<pedidos.length && todosFactibles && !pausa;i++){			
+			String [] datosPaquete = pedidos[i].trim().split("-");//0:id 1:fecha 2:hora 3:ciudad origen 4:ciudad fin					
+			Logger.info("Va a entrar a DFS");
+
+
+			String fechaActual="";
+            String fechaPedido=datosPaquete[1].substring(6,8)+"/"+datosPaquete[1].substring(4,6)+"/"+datosPaquete[1].substring(0,4);
+            Calendar c=Calendar.getInstance();
+            try {
+                c.setTime(new SimpleDateFormat("dd/M/yyyy").parse(fechaPedido));
+            } catch (ParseException ex) {
+                //Logger.getLogger(DFS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            int dayweek=c.get(Calendar.DAY_OF_WEEK)-1;//porque la semana comienza el domingo y el arreglo del 0-6  
+            if(!fechaPedido.equals(fechaActual)){//Se limpia el dia si ha cambiado de todos los almacenes
+
+                gc.limpiarTodo(dayweek);
+                fechaActual=fechaPedido;
+                if(i==0) Logger.info("Primer pedido: "+fechaPedido);
+            }
+
+			ConjRutas mejorRuta=gc.DFS(datosPaquete[3],datosPaquete[4],i,datosPaquete[2],1,datosPaquete[1]);
+			Logger.info("Salio de DFS");
+			String resultado=null;
+
+
+			Capacidades caps= new Capacidades();
+			String [] hora=datosPaquete[2].trim().split(":");
+			String keyCiudadescap=dayweek+"-"+Integer.parseInt(hora[0]);			
+			caps.keyCiudad=keyCiudadescap;
+			caps.capsCiudad=gc.capsCiudades(keyCiudadescap);
+			//Logger.info("ggggggggggggggg     "+dayweek+"-"+hora[0]+ " ggggggggggggggggggggggggg");
+			caps.capsVuelo=gc.capsAviones(dayweek);
+
+
+
+			if(mejorRuta.exito==1){//1 es Factible
+				resultado="Numpedido: "+i+" "+pedidos[i]+" Ruta: "+ mejorRuta.imprimirRecorrido();
+				String resultadoJSON=(String)gson.toJson(caps, Capacidades.class);
+				SimpleChat.notifyAll(resultadoJSON);//Acá se podría mandar un Json con los datos del paquete
+				
+			}else{
+				/*Logger.info("Entro aca Estado: "+mejorRuta.getEstadoRuta());
+				Logger.info("Id: "+datosPaquete[0]);
+				Logger.info("fecha: "+datosPaquete[1]);
+				Logger.info("Hora: "+datosPaquete[2]);
+				Logger.info("Ciudad Origen: "+datosPaquete[3]);
+				Logger.info("Ciudad Fin: "+datosPaquete[4]);*/
+				
+				// if(mejorRuta.exito==0){//Si se cae por condición de capacidades
+				// 	todosFactibles=false;
+				// 	Logger.info("Entro aca Estado: "+mejorRuta.exito);
+				// 	pk.factible=mejorRuta.exito;
+				// 	pk.stop=1;//para que el front sepa que ya se debe terminar de iterar
+				// 	pk.id=datosPaquete[0];
+				// 	pk.fecha=datosPaquete[1];
+				// 	pk.hora=datosPaquete[2];
+				// 	pk.origen=datosPaquete[3];
+				// 	pk.destino=datosPaquete[4];
+				// }
+				// resultado="Numpedido: "+i+" No se encontro ruta - Ciudad Origen: "+ datosPaquete[3]+" Ciudad Fin: "+datosPaquete[4];	
+			}	
+			//SimpleChat.notifyAll(resultado);
+			Logger.info(resultado);
+		}
+		return ok(Json.toJson(pk));
+	}
 
 	public static Result requestPackage(Long scale, Long time){
 		//Se debe correr todos los paquetes que calcen en ese periodo de tiempo y escala
@@ -136,8 +284,9 @@ public class Application extends Controller {
 
 			Capacidades caps= new Capacidades();
 			String [] hora=datosPaquete[2].trim().split(":");
-
-			caps.capsCiudad=gc.capsCiudades(dayweek+"-"+Integer.parseInt(hora[0]));
+			String keyCiudadescap=dayweek+"-"+Integer.parseInt(hora[0]);			
+			caps.keyCiudad=keyCiudadescap;
+			caps.capsCiudad=gc.capsCiudades(keyCiudadescap);
 			//Logger.info("ggggggggggggggg     "+dayweek+"-"+hora[0]+ " ggggggggggggggggggggggggg");
 			caps.capsVuelo=gc.capsAviones(dayweek);
 

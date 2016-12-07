@@ -1,0 +1,113 @@
+@(ciudades:List[models.Ciudades],vuelos:List[models.Vuelos])
+
+
+@layouts.headerandfooter("Welcome to Play Framework") {
+    
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Home Page</title>
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel='stylesheet' href='@routes.Assets.at("css/jquery.bxslider.css")'>
+        <link rel='stylesheet' href='@routes.Assets.at("css/MisEstilos.css")'>
+        <link rel='stylesheet' href='@routes.Assets.at("css/bootstrap.css")'>
+        <link rel='stylesheet' href='@routes.Assets.at("css/font-awesome.css")'>    
+        <link rel='stylesheet' href='@routes.Assets.at("css/DataTable.css")'>   
+        <link rel='stylesheet' href='@routes.Assets.at("css/simulacion.css")'>   
+        <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+        <script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+    </head>
+    <body>
+    <!---Cuerpo -->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <p class="lead"><strong>SIMULACIÓN</strong></p>             
+                </div>
+            </div>
+        </div>
+
+        <div id="chartdiv" style="background-color:#d5eff7; height: 500px;"></div>
+   
+        <div id="maplog"></div>
+
+         <div class="container" id="contain">
+            <div class="btn-group btn-group-justified">
+                <a type="button" class="btn btn-primary" onclick="togglePlay();">Iniciar/Pausar</a>
+                <a type="button" class="btn btn-primary">Ver Resultados</a>             
+                <div class="btn-group">
+                    <select class="form-control" id="escalaTiempo" >
+                        <option value="1">1 seg-10 mins</option>
+                        <option value="2">1 seg-30 mins</option>
+                    </select>
+                </div>
+            </div>
+        </div> 
+             
+        <div style="display:none" >
+            <table id="ciudades_tabla">
+                <tbody>
+                @for(ciudad <- ciudades){
+                    <tr>
+                        <td>@ciudad.cod_ciudad</td>
+                        <td>@ciudad.nombre</td>
+                        <td>@ciudad.pais</td>
+                        <td>@ciudad.latitud</td>
+                        <td>@ciudad.longitud</td>
+                        <td>@ciudad.huso</td>
+                    </tr>
+                }
+                </tbody>                         
+
+            </table>
+
+            <table id="vuelos_tabla">
+                <tbody>
+                @for(vuelo <- vuelos){
+                    <tr>
+                        <td>@vuelo.id</td>
+                        <td>@vuelo.ciudad_origen</td>
+                        <td>@vuelo.ciudad_destino</td>
+                        <td>@vuelo.hora_salida</td>
+                        <td>@vuelo.hora_llegada</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        <!--Pie de págna-->
+        
+        <!-- JQuery -->
+
+        <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+        <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+        <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+        <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
+
+        <script src='@routes.Assets.at("js/jquery-1.11.3.min.js")'></script>
+        <!-- Bootstrap -->
+        <script src='@routes.Assets.at("js/bootstrap.js")'></script>    
+        <!-- BXSlider -->
+        <script src='@routes.Assets.at("js/jquery.bxslider.min.js")'></script>      
+        <!-- Mis Scripts -->
+        <script src='@routes.Assets.at("js/MisScripts.js")'></script>
+
+        <script src='@routes.Assets.at("js/jquery.dataTables.js")'></script>
+                <script src='@routes.Assets.at("js/precargaDatos.js")'></script>
+        <script src='@routes.Assets.at("js/simulacion2.js")'></script>
+        <script>
+        $(document).ready(function() {
+           $('#example').DataTable( {
+               "language": {
+                   "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+               }
+            });
+        });
+        </script>
+    </body>
+    </html>
+
+}
