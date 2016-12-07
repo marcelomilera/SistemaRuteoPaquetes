@@ -294,10 +294,10 @@ public class GestorCiudades {
         
         
         //ArrayList<Ruta> RutasAnexadasO=ciudadO.getRutasAnexas(); //CAMBIAR A LAS RUTAS QUE PUEDAN SER FACTIBLES        
-        ArrayList<ConjRutas> listaRutasPreFactibles=(ArrayList<ConjRutas>) ciudadO.rutasXDestino.get(codCiudadF);
+        ArrayList<ConjRutas> listaRutasFactibles=(ArrayList<ConjRutas>) ciudadO.rutasXDestino.get(codCiudadF);
         // se descarta las q no cumplen con el tiempo tomando en cuenta la hora de ingreso del pedido
         //System.out.println("tamListaAntes: "+listaRutasPreFactibles.size());
-        ArrayList<ConjRutas> listaRutasFactibles=depurarRutas(listaRutasPreFactibles,horaPed,maxTiempoVuelo,minPed);
+        //ArrayList<ConjRutas> listaRutasFactibles=depurarRutas(listaRutasPreFactibles,horaPed,maxTiempoVuelo,minPed);
                             //se puede alterar el orden aleatoriamente para que no siempre prefiera los primeros
          //obtenemos el dia de la semana a examinar para el origen del pedido
          //System.out.println("tamListadespues: "+listaRutasFactibles.size()+" HoraPedido: "+horaPedido);
@@ -322,13 +322,20 @@ public class GestorCiudades {
         
         Set<String> setciudadesColapsadas = new HashSet<String>();// tienen formato: Ciudad-dia-hora
         Set<String> setvuelosColapsados = new HashSet<String>();// tienen formato: LlaveVuelo/dia
+        int ignorarxtiempo=0;
         
-        ConjRutas mejorRutaReal= listaRutasFactibles.get(0);
         Collections.shuffle(listaRutasFactibles);// desordenamos un poco para q no escoja siempre las mismas 
-        
+        ConjRutas mejorRutaReal= listaRutasFactibles.get(0);
         for(ConjRutas rutaPrueba :listaRutasFactibles){
             //si encontró solución en el maximo de rutas a evaluar
             if( (contadorRutas!=0) && (contadorRutas%maximasRutasAevaluar==0) &&(encontroAlMenosUno!=0) ) break; 
+
+            ignorarxtiempo=cumpleTiempo(rutaPrueba,horaPed,maxTiempoVuelo,minPed);
+            if(ignorarxtiempo==0){//si no cumple con tiempo
+                contadorRutas++;
+                ignorarxtiempo=1;
+                continue;
+            }            
             //verificamos capacidades
             int encontro=verificarCapacidades(rutaPrueba,setciudadesColapsadas,setvuelosColapsados,dayweek,horaPed,0);// el 0 significa consulta
             encontroAlMenosUno+=encontro;
@@ -349,6 +356,7 @@ public class GestorCiudades {
             return mejorRutaReal;
         }
         else{
+            if(ignorarxtiempo==1) return null;
             //reruteo : utilizar -> ciudadesColapsadas ,vuelosColapsados
              mejorRutaReal.registrarColapsos(setciudadesColapsadas, setvuelosColapsados);
              mejorRutaReal.exito=0;
@@ -371,7 +379,16 @@ public class GestorCiudades {
         
     }
     
-    
+    private int cumpleTiempo(ConjRutas ruta,int horaPedido,int maxTiempoVuelo,int minPedido){
+        int cumple=0;
+        
+        int horaPartida=ruta.vuelos.get(0).horaO;
+        if((horaPartida<horaPedido) ||((horaPartida==horaPedido) && (minPedido!=0)) ) horaPartida+=24;
+        int tEsperaInicial=horaPartida-horaPedido;
+        int tTotal=tEsperaInicial+ruta.tiempo;
+        if(tTotal<=maxTiempoVuelo) return 1; // exito 
+        return cumple;
+    }    
     
     
     public void imprimirCiudades(){

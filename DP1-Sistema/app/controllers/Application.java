@@ -188,12 +188,12 @@ public class Application extends Controller {
 
 
 
-			if(mejorRuta.exito==1){//1 es Factible
+			if(mejorRuta!=null){//1 es Factible
 				resultado="Numpedido: "+i+" "+pedidos[i]+" Ruta: "+ mejorRuta.imprimirRecorrido();
 				String resultadoJSON=(String)gson.toJson(caps, Capacidades.class);
 				SimpleChat.notifyAll(resultadoJSON);//Acá se podría mandar un Json con los datos del paquete
 				
-			}else{
+			
 				/*Logger.info("Entro aca Estado: "+mejorRuta.getEstadoRuta());
 				Logger.info("Id: "+datosPaquete[0]);
 				Logger.info("fecha: "+datosPaquete[1]);
@@ -215,7 +215,7 @@ public class Application extends Controller {
 				// resultado="Numpedido: "+i+" No se encontro ruta - Ciudad Origen: "+ datosPaquete[3]+" Ciudad Fin: "+datosPaquete[4];	
 			}	
 			//SimpleChat.notifyAll(resultado);
-			Logger.info(resultado);
+			//Logger.info(resultado);
 		}
 		return ok(Json.toJson(pk));
 	}
@@ -223,9 +223,15 @@ public class Application extends Controller {
 	public static Result requestPackage(Long scale, Long time){
 		//Se debe correr todos los paquetes que calcen en ese periodo de tiempo y escala
 		Logger.info("Escala: "+scale+" Time: "+time);
-		
+		Gson gsonlectura = new Gson();		
 		BufferArchivos baPedidos = BufferArchivos.getInstance();
-		
+		try (Reader reader = new FileReader( Play.application().getFile("/conf/pedidosData3Dias.json"))) {
+			baPedidos=gsonlectura.fromJson(reader, BufferArchivos.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
 		TreeMap<Integer,String[]> listaPedidosEscala=null;
 		if(scale==1)
 			listaPedidosEscala = baPedidos.getListaPedidosEscala1();
@@ -292,7 +298,7 @@ public class Application extends Controller {
 
 
 
-			if(mejorRuta.exito==1){//1 es Factible
+			if(mejorRuta!=null && mejorRuta.exito==1){//1 es Factible
 				resultado="Numpedido: "+i+" "+pedidos[i]+" Ruta: "+ mejorRuta.imprimirRecorrido();
 				String resultadoJSON=(String)gson.toJson(caps, Capacidades.class);
 				SimpleChat.notifyAll(resultadoJSON);//Acá se podría mandar un Json con los datos del paquete
@@ -319,7 +325,7 @@ public class Application extends Controller {
 				// resultado="Numpedido: "+i+" No se encontro ruta - Ciudad Origen: "+ datosPaquete[3]+" Ciudad Fin: "+datosPaquete[4];	
 			}	
 			//SimpleChat.notifyAll(resultado);
-			Logger.info(resultado);
+			if(resultado!=null)Logger.info(resultado);
 		}
 		return ok(Json.toJson(pk));
 	}

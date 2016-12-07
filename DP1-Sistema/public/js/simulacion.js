@@ -308,7 +308,8 @@ function togglePlay() {
           longitude: lonO,
           width: 3,
           customData: vuelo.tiempo,
-          height: 3
+          height: 3,
+          mouseEnabled: false
         });
 
     }

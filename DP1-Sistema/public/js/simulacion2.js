@@ -298,7 +298,6 @@ function togglePlay() {
         var ciudO=cities.get(vuelo.ciudadO).nombre;
         var ciudF=cities.get(vuelo.ciudadF).nombre;        
         var titulo=ciudO+"-"+ciudF; 
-
         //CREAR AVIONES
         map.dataProvider.images.push({
           id: id,
@@ -308,7 +307,8 @@ function togglePlay() {
           longitude: lonO,
           width: 3,
           customData: vuelo.tiempo,
-          height: 3
+          height: 3,
+          mouseEnabled: false
         });
 
     }
