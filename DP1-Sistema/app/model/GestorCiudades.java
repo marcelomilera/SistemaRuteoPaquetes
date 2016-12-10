@@ -58,17 +58,17 @@ public class GestorCiudades {
 	
 	static {
 		Gson gson = new Gson();
-		Logger.info("Gestor ha instanciarse");
+		//Logger.info("Gestor ha instanciarse");
 		try (Reader reader = new FileReader( Play.application().getFile("/conf/gestorFinal.json"))) {
 			instance=gson.fromJson(reader, GestorCiudades.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Logger.info("Gestor instanciado");
+		//Logger.info("Gestor instanciado");
 	}
 
     public static GestorCiudades getInstance(){
-        Logger.info("Gestor GetInstance");
+        //Logger.info("Gestor GetInstance");
         return instance;
     }
 
@@ -141,8 +141,8 @@ public class GestorCiudades {
                 Ruta newRuta=new Ruta(ciudadO,ciudadF,horaO,horaF);
                 newRuta.horaF=horaFin;
                 newRuta.horaO=horaPartida;
-                if(getCiudades().get(ciudadO).getContinente().equals(getCiudades().get(ciudadF).getContinente())) newRuta.setTiempo(12);
-                else newRuta.setTiempo(24);
+                //if(getCiudades().get(ciudadO).getContinente().equals(getCiudades().get(ciudadF).getContinente())) newRuta.setTiempo(12);
+                //else newRuta.setTiempo(24);
                 Ciudad ciudadOrigen=getCiudades().get(ciudadO);
                 ciudadOrigen.agregarRuta(newRuta);
             }
@@ -197,7 +197,7 @@ public class GestorCiudades {
                     //limpiarCapacidad_Almacenes_Rutas(fechaActual);
                     fechaActual=fechaPedido;
                 }
-                DFS(codCiudadO,codCiudadF,numPedido,horaPedido,cantPaquetes,fechaPedido);
+                DFS(codCiudadO,codCiudadF,numPedido,horaPedido,cantPaquetes,cantPaquetes);// este cant paquetes en verdad es dayweek
                 
                 numPedido++;
             }
@@ -279,7 +279,7 @@ public class GestorCiudades {
         return rutas;
     }
         
-    public ConjRutas DFS(String codCiudadO,String codCiudadF,int numPedido, String horaPedido,int cantPaquetes,String fechaPedido){
+    public ConjRutas DFS(String codCiudadO,String codCiudadF,int numPedido, String horaPedido,int cantPaquetes,int  dayweek){
         Ciudad ciudadO=getCiudades().get(codCiudadO);
         Ciudad ciudadF=getCiudades().get(codCiudadF);
         int maxTiempoVuelo;
@@ -301,14 +301,14 @@ public class GestorCiudades {
                             //se puede alterar el orden aleatoriamente para que no siempre prefiera los primeros
          //obtenemos el dia de la semana a examinar para el origen del pedido
          //System.out.println("tamListadespues: "+listaRutasFactibles.size()+" HoraPedido: "+horaPedido);
-        Calendar c=Calendar.getInstance();
-        try {
-            c.setTime(new SimpleDateFormat("dd/M/yyyy").parse(fechaPedido));
-        } catch (ParseException ex) {
-            //Logger.getLogger(DFS.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        int dayweek=c.get(Calendar.DAY_OF_WEEK)-1;//porque la semana comienza el domingo y el arreglo del 0-6
-            
+        // Calendar c=Calendar.getInstance();
+        // try {
+        //     c.setTime(new SimpleDateFormat("dd/M/yyyy").parse(fechaPedido));
+        // } catch (ParseException ex) {
+        //     //Logger.getLogger(DFS.class.getName()).log(Level.SEVERE, null, ex);
+        // }
+        //int dayweek=c.get(Calendar.DAY_OF_WEEK)-1;//porque la semana comienza el domingo y el arreglo del 0-6
+            //Logger.info("dayweek interno: "+dayweek);
         int cantidadAnexos=listaRutasFactibles.size();
         if(cantidadAnexos==0) {
 //             System.out.println(ANSI_RED +horaPedido+"   "+fechaPedido+" Numero de Pedido: "+numPedido+" "+codCiudadO+
@@ -319,7 +319,7 @@ public class GestorCiudades {
         if(cantidadAnexos<=maximasRutasAevaluar) maximasRutasAevaluar=cantidadAnexos;
         int contadorRutas=0;
         int encontroAlMenosUno=0; 
-        
+        int dayweekPar=dayweek;
         Set<String> setciudadesColapsadas = new HashSet<String>();// tienen formato: Ciudad-dia-hora
         Set<String> setvuelosColapsados = new HashSet<String>();// tienen formato: LlaveVuelo/dia
         int ignorarxtiempo=0;
@@ -337,7 +337,8 @@ public class GestorCiudades {
                 continue;
             }            
             //verificamos capacidades
-            int encontro=verificarCapacidades(rutaPrueba,setciudadesColapsadas,setvuelosColapsados,dayweek,horaPed,0);// el 0 significa consulta
+            
+            int encontro=verificarCapacidades(rutaPrueba,setciudadesColapsadas,setvuelosColapsados,dayweekPar,horaPed,0);// el 0 significa consulta
             encontroAlMenosUno+=encontro;
             
             //evaluamos la mejor
@@ -348,8 +349,8 @@ public class GestorCiudades {
         }
         if(encontroAlMenosUno!=0){ // si encontró solucion
             //actualizamos las caps
-            verificarCapacidades(mejorRutaReal,setciudadesColapsadas,setvuelosColapsados,dayweek,horaPed,1); //el 1 significa actualizar
-           Logger.info(fechaPedido+" Numero de Pedido: "+numPedido+ " Ciudad Origen: "+codCiudadO+
+            verificarCapacidades(mejorRutaReal,setciudadesColapsadas,setvuelosColapsados,dayweekPar,horaPed,1); //el 1 significa actualizar
+           Logger.info(" Numero de Pedido: "+numPedido+ " Ciudad Origen: "+codCiudadO+
                    " - Ciudad Fin: "+codCiudadF+" Mejor Ruta: "+mejorRutaReal.imprimirRecorrido()
                    +" Mejor Tiempo: "+mejorRutaReal.tiempo);
             mejorRutaReal.exito=1;
@@ -360,7 +361,7 @@ public class GestorCiudades {
             //reruteo : utilizar -> ciudadesColapsadas ,vuelosColapsados
              mejorRutaReal.registrarColapsos(setciudadesColapsadas, setvuelosColapsados);
              mejorRutaReal.exito=0;
-             Logger.info(fechaPedido+" Numero de Pedido: "+numPedido+" "+codCiudadO+
+             Logger.info(" Numero de Pedido: "+numPedido+" "+codCiudadO+
                      "-"+codCiudadF +" No se encontro ruta -no hay capacidad");
              Logger.info("Caida x ciudades: ==========");
              for(String ciudadCol :setciudadesColapsadas){
@@ -500,6 +501,8 @@ public class GestorCiudades {
             //System.out.println(key);
             if(ciudad.proyeccionCiudad.get(key)==ciudad.capacidadMaxima) return key;
             ciudad.proyeccionCiudad.put(key,ciudad.proyeccionCiudad.get(key)+flag);  //se actualiza si flag es 1
+
+            //if(flag==1) Logger.info("key: "+key+" Ciudad capacidad actualizo??:  "+ciudad.proyeccionCiudad.get(key));
             //registramos el espacio libre q posee tomar esta ruta
             //Solo para ciudad origen y escalas ( No destino final)
             if((i==horaPartida) && (horaInicio!=horaPartidaCaps)) rutaPrueba.capacidades+=ciudad.proyeccionCiudad.get(key);
@@ -525,10 +528,11 @@ public class GestorCiudades {
         return rutasfacti;
     }
 
-    public ArrayList<Integer> capsCiudades(String Key){
+    public ArrayList<Integer> capsCiudades(String key){
         ArrayList<Integer> caps= new ArrayList<Integer>();
         for(Ciudad ciudad: ciudades.values()){
-            caps.add(ciudad.proyeccionCiudad.get(Key));
+            caps.add(ciudad.proyeccionCiudad.get(key));
+            //if(ciudad.proyeccionCiudad.get(key)>0) Logger.info("Si existemayor q 0 ++++++++++++++++++++++++++++++++++");
         }
         return caps;
     }

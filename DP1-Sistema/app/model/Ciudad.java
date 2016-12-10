@@ -23,7 +23,7 @@ import java.util.TreeMap;
  */
 public class Ciudad {
     private int Id;
-    private String codigo;
+    public String codigo;
     private String nombre;
     private String pais;
     private String Continente;

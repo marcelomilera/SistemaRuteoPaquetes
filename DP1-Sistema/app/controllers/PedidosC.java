@@ -71,7 +71,7 @@ public class PedidosC extends Controller {
 			Date date = new Date();
 			
 			
-			ConjRutas mejorRuta=temporal.DFS(ciudad_origen,ciudad_destino,1,hourFormat.format(date),1,dateFormat.format(date));
+			ConjRutas mejorRuta=temporal.DFS(ciudad_origen,ciudad_destino,1,hourFormat.format(date),1,1);//cambiar el ultimo por fecha
 			
 			if(mejorRuta.exito==1){//1 es Factible
 			// 	pedido.save();

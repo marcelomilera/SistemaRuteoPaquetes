@@ -172,8 +172,8 @@ public class Application extends Controller {
                 fechaActual=fechaPedido;
                 if(i==0) Logger.info("Primer pedido: "+fechaPedido);
             }
-
-			ConjRutas mejorRuta=gc.DFS(datosPaquete[3],datosPaquete[4],i,datosPaquete[2],1,datosPaquete[1]);
+            Logger.info("Fecha pedido: "+fechaPedido);
+			ConjRutas mejorRuta=gc.DFS(datosPaquete[3],datosPaquete[4],i,datosPaquete[2],1,dayweek);
 			Logger.info("Salio de DFS");
 			String resultado=null;
 
@@ -259,12 +259,12 @@ public class Application extends Controller {
 		
 		
 		Logger.info("Cantidad paquetes: "+pedidos.length+"-"+time);
-		Gson gson = new Gson();
+		
 		
 		Boolean todosFactibles=true;
 		for(int i=0;i<pedidos.length && todosFactibles && !pausa;i++){			
 			String [] datosPaquete = pedidos[i].trim().split("-");//0:id 1:fecha 2:hora 3:ciudad origen 4:ciudad fin					
-			Logger.info("Va a entrar a DFS");
+			//Logger.info("Va a entrar a DFS");
 
 
 			String fechaActual="";
@@ -282,9 +282,10 @@ public class Application extends Controller {
                 fechaActual=fechaPedido;
                 if(i==0) Logger.info("Primer pedido: "+fechaPedido);
             }
-
-			ConjRutas mejorRuta=gc.DFS(datosPaquete[3],datosPaquete[4],i,datosPaquete[2],1,datosPaquete[1]);
-			Logger.info("Salio de DFS");
+            Logger.info("Va a entrar a DFS dayweek: "+ dayweek);
+            Logger.info("Fecha pedido: "+fechaPedido);
+			ConjRutas mejorRuta=gc.DFS(datosPaquete[3],datosPaquete[4],i,datosPaquete[2],1,dayweek);
+			Logger.info("Salio de DFS dayweek: "+ dayweek);
 			String resultado=null;
 
 
@@ -293,13 +294,16 @@ public class Application extends Controller {
 			String keyCiudadescap=dayweek+"-"+Integer.parseInt(hora[0]);			
 			caps.keyCiudad=keyCiudadescap;
 			caps.capsCiudad=gc.capsCiudades(keyCiudadescap);
+
 			//Logger.info("ggggggggggggggg     "+dayweek+"-"+hora[0]+ " ggggggggggggggggggggggggg");
+			
 			caps.capsVuelo=gc.capsAviones(dayweek);
 
 
 
 			if(mejorRuta!=null && mejorRuta.exito==1){//1 es Factible
 				resultado="Numpedido: "+i+" "+pedidos[i]+" Ruta: "+ mejorRuta.imprimirRecorrido();
+				Gson gson = new Gson();
 				String resultadoJSON=(String)gson.toJson(caps, Capacidades.class);
 				SimpleChat.notifyAll(resultadoJSON);//Acá se podría mandar un Json con los datos del paquete
 				
