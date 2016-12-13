@@ -144,8 +144,12 @@ function updateLog(wsEvent) {
 function actualizarCapsCiudades(caps){
 
   for (var i = 0; i < rowLength; i++) {
-    map.dataProvider.images[i].description=caps[i];
+    map.dataProvider.images[i].description=caps[i];    
     if(caps[i]>420)  {
+      if(caps[i]>600)  {
+        writeToScreen("<span style='color: red'> Ciudad: " + map.dataProvider.images[i].title + "</span>");
+        writeToScreen("<span style='color: red'> Capacidad: " + caps[i] + "</span>");
+      }      
       map.dataProvider.images[i].color="#db8383";
       map.dataProvider.images[i].scale=3;
     }  
@@ -196,7 +200,7 @@ function recursiveVuelosPaquetes(contador) {
         map.dataProvider.images[id].scale= 1;
         map.dataProvider.images[id].description= "Colapsado";
         map.validateData();
-        writeToScreen("FIN DE SIMULACION");
+        writeToScreen("<span style='color: red'>FIN DE SIMULACIÓN</span>");        
         pause=1;           
         // stop playing (clear interval)
         clearInterval( interval );
